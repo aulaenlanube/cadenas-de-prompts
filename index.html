@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadenas de Prompts</title>
+    <!-- Outfit Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Main Style -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Lucide Icons (CDN) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Dashboard View -->
+        <main id="dashboardView" class="view active-view">
+            <header class="dashboard-header">
+                <h1>Cadenas de <span class="title-gradient">Prompts</span></h1>
+                <p>Explora el proceso paso a paso de cómo se crearon estas aplicaciones educativas usando Inteligencia Artificial.</p>
+            </header>
+
+            <section id="cardsGrid" class="cards-grid">
+                <!-- Cards will be injected by app.js -->
+            </section>
+        </main>
+
+        <!-- App Details View -->
+        <main id="appDetailsView" class="view">
+            <button id="backBtn" class="back-btn">
+                <i data-lucide="arrow-left" style="width:18px;height:18px;"></i> Volver al Dashboard
+            </button>
+
+            <header class="details-header glass-panel">
+                <div class="details-title-row">
+                    <div>
+                        <h1 id="detailTitle">Título de App</h1>
+                        <p id="detailDescription">Descripción de App</p>
+                    </div>
+                    <a href="#" id="detailLink" target="_blank" rel="noopener noreferrer" class="primary-btn">
+                        Probar app <i data-lucide="external-link" style="width:20px;height:20px;"></i>
+                    </a>
+                </div>
+            </header>
+
+            <section class="prompts-section">
+                <h2 class="section-title">
+                    <i data-lucide="code-2" color="#6366f1"></i> Cadena de Prompts (<span id="promptCount">0</span>)
+                </h2>
+
+                <div id="promptsContainer" class="prompts-container">
+                    <!-- Prompts will be injected here -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Application Script -->
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
