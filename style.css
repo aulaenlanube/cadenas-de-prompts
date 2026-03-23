@@ -415,3 +415,83 @@ body::before {
   .prompt-number { left: -2rem; width: 36px; height: 36px; font-size: 0.9rem; border-width: 3px;}
   .prompts-line { left: 10px; }
 }
+
+/* --- LIGHT THEME --- */
+body.light-theme {
+  --bg-color: #f8fafc;
+  --surface-color: rgba(255, 255, 255, 0.6);
+  --surface-color-hover: rgba(255, 255, 255, 0.9);
+  --border-color: rgba(0, 0, 0, 0.08);
+  --text-main: #0f172a;
+  --text-muted: #475569;
+  --glow-shadow: 0 0 20px rgba(99, 102, 241, 0.15);
+}
+
+body.light-theme::before {
+  background: radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.08) 0%, rgba(255,255,255,0) 40%),
+              radial-gradient(circle at 80% 20%, rgba(168, 85, 247, 0.06) 0%, rgba(255,255,255,0) 40%);
+}
+
+body.light-theme .glass-panel {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+}
+
+body.light-theme .section-title {
+  color: var(--text-main);
+}
+
+body.light-theme .prompt-text-block {
+    background: rgba(255, 255, 255, 0.6);
+    color: #334155;
+    box-shadow: inset 0 2px 10px rgba(0,0,0,0.03);
+    border-left: 4px solid #6366f1;
+}
+
+body.light-theme .prompt-content h4 {
+    color: #6366f1;
+}
+
+body.light-theme .app-card-icon {
+    background: rgba(0, 0, 0, 0.03);
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.02);
+}
+
+body.light-theme .prompts-line {
+    background: rgba(0,0,0,0.1);
+}
+
+/* Theme Toggle Button Panel */
+.theme-toggle-panel {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    border-radius: 30px;
+    z-index: 1000;
+}
+
+.theme-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.theme-btn:hover {
+    color: var(--text-main);
+}
+
+.theme-btn.active {
+    background: var(--accent-gradient);
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(168, 85, 247, 0.3);
+}

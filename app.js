@@ -153,6 +153,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.addEventListener('scroll', updateProgressBar);
 
+    // Theme Toggle Logic
+    const lightThemeBtn = document.getElementById('lightThemeBtn');
+    const darkThemeBtn = document.getElementById('darkThemeBtn');
+
+    lightThemeBtn.addEventListener('click', () => {
+        document.body.classList.add('light-theme');
+        lightThemeBtn.classList.add('active');
+        darkThemeBtn.classList.remove('active');
+    });
+
+    darkThemeBtn.addEventListener('click', () => {
+        document.body.classList.remove('light-theme');
+        darkThemeBtn.classList.add('active');
+        lightThemeBtn.classList.remove('active');
+    });
+
     backBtn.addEventListener('click', () => {
         appDetailsView.classList.remove('active-view');
         dashboardView.classList.add('active-view');
