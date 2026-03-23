@@ -5,6 +5,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const backBtn = document.getElementById('backBtn');
     const progressBar = document.getElementById('progressBar');
 
+    const promptNavigator = document.getElementById('promptNavigator');
+    const prevPromptBtn = document.getElementById('prevPromptBtn');
+    const nextPromptBtn = document.getElementById('nextPromptBtn');
+    const currentPromptIndicator = document.querySelector('#currentPromptIndicator span');
+    
+    let currentAppTotalPrompts = 0;
+    let activePromptIndex = 0;
+
     const detailTitle = document.getElementById('detailTitle');
     const detailDescription = document.getElementById('detailDescription');
     const detailLink = document.getElementById('detailLink');
@@ -91,6 +99,14 @@ document.addEventListener('DOMContentLoaded', () => {
         
         lucide.createIcons();
         setupScrollReveal();
+
+        currentAppTotalPrompts = app.prompts.length;
+        if (currentAppTotalPrompts > 0) {
+            promptNavigator.classList.add('visible');
+        } else {
+            promptNavigator.classList.remove('visible');
+        }
+        updateNavigator();
     }
 
     // Scroll Progress & Reveal Logic
@@ -159,7 +175,58 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    window.addEventListener('scroll', updateProgressBar);
+    function updateNavigator() {
+        if (currentAppTotalPrompts === 0) return;
+        
+        const prompts = document.querySelectorAll('.prompt-item');
+        if (prompts.length === 0) return;
+
+        let closestIdx = 0;
+        let minDistance = Infinity;
+        // Viewport center slightly shifted to top is better for reading
+        const viewportCenter = window.innerHeight * 0.4; 
+
+        prompts.forEach((prompt, idx) => {
+            const rect = prompt.getBoundingClientRect();
+            // Prioritize the top edge of the box
+            const distance = Math.abs(rect.top - viewportCenter);
+            if (distance < minDistance) {
+                minDistance = distance;
+                closestIdx = idx;
+            }
+        });
+
+        activePromptIndex = closestIdx;
+        currentPromptIndicator.textContent = `${activePromptIndex + 1} / ${currentAppTotalPrompts}`;
+
+        prevPromptBtn.disabled = activePromptIndex === 0;
+        nextPromptBtn.disabled = activePromptIndex === currentAppTotalPrompts - 1;
+    }
+
+    prevPromptBtn.addEventListener('click', () => {
+        if (activePromptIndex > 0) {
+            const prompts = document.querySelectorAll('.prompt-item');
+            const target = prompts[activePromptIndex - 1];
+            const y = target.getBoundingClientRect().top + window.scrollY - 120;
+            window.scrollTo({ top: y, behavior: 'smooth' });
+        }
+    });
+
+    nextPromptBtn.addEventListener('click', () => {
+        if (activePromptIndex < currentAppTotalPrompts - 1) {
+            const prompts = document.querySelectorAll('.prompt-item');
+            const target = prompts[activePromptIndex + 1];
+            const y = target.getBoundingClientRect().top + window.scrollY - 120;
+            window.scrollTo({ top: y, behavior: 'smooth' });
+        }
+    });
+
+    window.addEventListener('scroll', () => {
+        updateProgressBar();
+        if(appDetailsView.classList.contains('active-view')) {
+            updateNavigator();
+        }
+    });
 
     // Theme Toggle Logic
     const lightThemeBtn = document.getElementById('lightThemeBtn');
@@ -183,6 +250,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     backBtn.addEventListener('click', () => {
+        promptNavigator.classList.remove('visible');
         appDetailsView.classList.remove('active-view');
         dashboardView.classList.add('active-view');
         progressBar.style.width = '0%';

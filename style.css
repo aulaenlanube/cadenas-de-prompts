@@ -571,3 +571,79 @@ body.light-theme .scroll-top-btn:hover {
     background: white;
     box-shadow: 0 5px 15px rgba(0,0,0,0.1), var(--glow-shadow);
 }
+
+/* Floating Prompt Navigator */
+.prompt-navigator {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px) scale(0.9);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 40px;
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.1);
+}
+
+body.light-theme .prompt-navigator {
+    background: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1), 0 0 0 1px rgba(0,0,0,0.05);
+}
+
+.prompt-navigator.visible {
+    transform: translateX(-50%) translateY(0) scale(1);
+    opacity: 1;
+    pointer-events: all;
+}
+
+.nav-indicator {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--text-main);
+    min-width: 70px;
+    text-align: center;
+    letter-spacing: 1px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.nav-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.nav-btn:hover:not(:disabled) {
+    background: rgba(255,255,255,0.1);
+    color: var(--accent-color);
+}
+
+body.light-theme .nav-btn:hover:not(:disabled) {
+    background: rgba(0,0,0,0.05);
+}
+
+.nav-btn:disabled {
+    opacity: 0.2;
+    cursor: default;
+}
+
+@media (max-width: 768px) {
+    .prompt-navigator {
+        bottom: 1rem;
+    }
+}
