@@ -294,19 +294,20 @@ body::before {
 
 .prompts-container {
   position: relative;
-  padding-left: 3rem;
+  padding-left: 3.5rem;
   padding-bottom: 2rem;
 }
 
-/* The Glowing Timeline Line */
+/* The Glowing Timeline Line perfectly aligned */
 .prompts-line {
   position: absolute;
   top: 0;
   bottom: 0;
-  left: 20px;
+  left: 0;
   width: 4px;
   background: rgba(255,255,255,0.05);
   border-radius: 4px;
+  transform: translateX(-50%);
 }
 
 .prompts-line-fill {
@@ -342,7 +343,7 @@ body::before {
 
 .prompt-number {
   position: absolute;
-  left: -3rem;
+  left: -3.5rem;
   top: 10px;
   width: 44px;
   height: 44px;
@@ -408,12 +409,38 @@ body::before {
 }
 
 @media (max-width: 768px) {
-  .dashboard-header h1 { font-size: 3rem; }
-  .details-title-row { flex-direction: column; align-items: flex-start; }
-  .prompt-content { padding: 1.5rem; }
-  .prompts-container { padding-left: 2rem; }
-  .prompt-number { left: -2rem; width: 36px; height: 36px; font-size: 0.9rem; border-width: 3px;}
-  .prompts-line { left: 10px; }
+  .app-container { padding: 1rem; }
+  
+  .dashboard-header { margin: 2rem 0; }
+  .dashboard-header h1 { font-size: 2.5rem; }
+  .dashboard-header p { font-size: 1rem; }
+  
+  .cards-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+  .app-card { padding: 1.5rem; }
+  
+  .details-header { padding: 1.5rem; margin-bottom: 2rem; }
+  .details-title-row h1 { font-size: 2rem; }
+  .primary-btn { padding: 0.8rem 1.2rem; font-size: 1rem; width: 100%; justify-content: center; }
+  
+  .section-title { font-size: 1.5rem; margin-bottom: 2rem; }
+  
+  .prompts-container { padding-left: 2.5rem; }
+  .prompt-number { left: -2.5rem; width: 32px; height: 32px; font-size: 0.9rem; border-width: 3px; }
+  
+  .prompt-content { padding: 1.2rem; }
+  .prompt-content h4 { font-size: 0.8rem; margin-bottom: 1rem; }
+  .prompt-text-block { 
+     padding: 1rem; 
+     font-size: 0.85rem; 
+     overflow-wrap: break-word;
+     word-wrap: break-word;
+  }
+  
+  .theme-toggle-panel {
+     bottom: 1rem;
+     right: 1rem;
+     transform: scale(0.9);
+  }
 }
 
 /* --- LIGHT THEME --- */
