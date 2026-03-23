@@ -105,6 +105,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const scrolled = (winScroll / height) * 100;
         progressBar.style.width = scrolled + '%';
 
+        // Scroll to top button visibility
+        const scrollTopBtn = document.getElementById('scrollTopBtn');
+        if (winScroll > 300) {
+            scrollTopBtn.classList.add('visible');
+        } else {
+            scrollTopBtn.classList.remove('visible');
+        }
+
         // Update the glowing timeline line fill as well
         const lineFill = document.getElementById('promptsLineFill');
         if (lineFill) {
@@ -167,6 +175,11 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.classList.remove('light-theme');
         darkThemeBtn.classList.add('active');
         lightThemeBtn.classList.remove('active');
+    });
+
+    const scrollTopBtn = document.getElementById('scrollTopBtn');
+    scrollTopBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
     backBtn.addEventListener('click', () => {
