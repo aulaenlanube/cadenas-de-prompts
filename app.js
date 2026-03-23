@@ -175,6 +175,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    const TARGET_OFFSET = 150; // pixels from top of viewport to align targets
+
     function updateNavigator() {
         if (currentAppTotalPrompts === 0) return;
         
@@ -182,17 +184,23 @@ document.addEventListener('DOMContentLoaded', () => {
         if (prompts.length === 0) return;
 
         let closestIdx = 0;
+        let foundIntersect = false;
         let minDistance = Infinity;
-        // Viewport center slightly shifted to top is better for reading
-        const viewportCenter = window.innerHeight * 0.4; 
 
         prompts.forEach((prompt, idx) => {
             const rect = prompt.getBoundingClientRect();
-            // Prioritize the top edge of the box
-            const distance = Math.abs(rect.top - viewportCenter);
-            if (distance < minDistance) {
-                minDistance = distance;
+            
+            // If the element crosses the strict target line
+            if (rect.top <= TARGET_OFFSET && rect.bottom > TARGET_OFFSET) {
                 closestIdx = idx;
+                foundIntersect = true;
+            } else if (!foundIntersect) {
+                // Find closest top edge to our TARGET_OFFSET line
+                const distance = Math.abs(rect.top - TARGET_OFFSET);
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    closestIdx = idx;
+                }
             }
         });
 
@@ -207,7 +215,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (activePromptIndex > 0) {
             const prompts = document.querySelectorAll('.prompt-item');
             const target = prompts[activePromptIndex - 1];
-            const y = target.getBoundingClientRect().top + window.scrollY - 120;
+            const y = target.getBoundingClientRect().top + window.scrollY - TARGET_OFFSET;
             window.scrollTo({ top: y, behavior: 'smooth' });
         }
     });
@@ -216,7 +224,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (activePromptIndex < currentAppTotalPrompts - 1) {
             const prompts = document.querySelectorAll('.prompt-item');
             const target = prompts[activePromptIndex + 1];
-            const y = target.getBoundingClientRect().top + window.scrollY - 120;
+            const y = target.getBoundingClientRect().top + window.scrollY - TARGET_OFFSET;
             window.scrollTo({ top: y, behavior: 'smooth' });
         }
     });
