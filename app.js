@@ -21,8 +21,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Cross-fade spatial transition
     function triggerViewTransition(fromView, toView, direction) {
-        document.body.style.overflow = 'hidden'; // avoid weird scrollbars during animation
-        fromView.style.animation = direction === 'forward' ? 'fadeOutSwipe 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards' : 'fadeOutSwipeBack 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards';
+        document.body.style.overflow = 'hidden'; 
+        fromView.style.animation = direction === 'forward' ? 
+            'slideExitLeft 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards' : 
+            'slideExitRight 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards';
         
         // Wait just before exit completes to bring next view
         setTimeout(() => {
@@ -30,15 +32,17 @@ document.addEventListener('DOMContentLoaded', () => {
             fromView.style.animation = ''; // clean up
             
             toView.classList.add('active-view');
-            toView.style.animation = direction === 'forward' ? 'fadeInSwipe 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards' : 'fadeInSwipeBack 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
+            toView.style.animation = direction === 'forward' ? 
+                'slideEnterRight 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards' : 
+                'slideEnterLeft 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards';
             window.scrollTo({ top: 0, behavior: 'instant' });
             
             setTimeout(() => {
                 document.body.style.overflow = '';
                 toView.style.animation = '';
-            }, 500);
+            }, 400);
 
-        }, 360);
+        }, 340);
     }
 
     function renderCards() {

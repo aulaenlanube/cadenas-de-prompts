@@ -77,21 +77,21 @@ body::before {
   opacity: 1;
 }
 
-@keyframes fadeOutSwipe {
-  from { opacity: 1; transform: translateX(0) scale(1); filter: blur(0); }
-  to { opacity: 0; transform: translateX(-40px) scale(0.96); filter: blur(4px); }
+@keyframes slideExitLeft {
+  from { opacity: 1; transform: translateX(0); }
+  to { opacity: 0; transform: translateX(-100px); }
 }
-@keyframes fadeInSwipe {
-  from { opacity: 0; transform: translateX(40px) scale(1.04); filter: blur(4px); }
-  to { opacity: 1; transform: translateX(0) scale(1); filter: blur(0); }
+@keyframes slideEnterRight {
+  from { opacity: 0; transform: translateX(100px); }
+  to { opacity: 1; transform: translateX(0); }
 }
-@keyframes fadeOutSwipeBack {
-  from { opacity: 1; transform: translateX(0) scale(1); filter: blur(0); }
-  to { opacity: 0; transform: translateX(40px) scale(1.04); filter: blur(4px); }
+@keyframes slideExitRight {
+  from { opacity: 1; transform: translateX(0); }
+  to { opacity: 0; transform: translateX(100px); }
 }
-@keyframes fadeInSwipeBack {
-  from { opacity: 0; transform: translateX(-40px) scale(0.96); filter: blur(4px); }
-  to { opacity: 1; transform: translateX(0) scale(1); filter: blur(0); }
+@keyframes slideEnterLeft {
+  from { opacity: 0; transform: translateX(-100px); }
+  to { opacity: 1; transform: translateX(0); }
 }
 
 /* Ultra premium glass panel */
