@@ -19,6 +19,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const promptCount = document.getElementById('promptCount');
     const promptsContainer = document.getElementById('promptsContainer');
 
+    // Cross-fade spatial transition
+    function triggerViewTransition(fromView, toView, direction) {
+        document.body.style.overflow = 'hidden'; // avoid weird scrollbars during animation
+        fromView.style.animation = direction === 'forward' ? 'fadeOutSwipe 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards' : 'fadeOutSwipeBack 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards';
+        
+        // Wait just before exit completes to bring next view
+        setTimeout(() => {
+            fromView.classList.remove('active-view');
+            fromView.style.animation = ''; // clean up
+            
+            toView.classList.add('active-view');
+            toView.style.animation = direction === 'forward' ? 'fadeInSwipe 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards' : 'fadeInSwipeBack 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
+            window.scrollTo({ top: 0, behavior: 'instant' });
+            
+            setTimeout(() => {
+                document.body.style.overflow = '';
+                toView.style.animation = '';
+            }, 500);
+
+        }, 360);
+    }
+
     function renderCards() {
         cardsGrid.innerHTML = '';
         window.appDataList.forEach((app, index) => {
@@ -52,10 +74,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const app = window.appDataList.find(a => a.id === appId);
         if(!app) return;
 
-        dashboardView.classList.remove('active-view');
-        appDetailsView.classList.add('active-view');
+        triggerViewTransition(dashboardView, appDetailsView, 'forward');
 
-        window.scrollTo(0, 0);
         updateProgressBar();
 
         detailTitle.textContent = app.title;
@@ -259,10 +279,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     backBtn.addEventListener('click', () => {
         promptNavigator.classList.remove('visible');
-        appDetailsView.classList.remove('active-view');
-        dashboardView.classList.add('active-view');
         progressBar.style.width = '0%';
-        window.scrollTo(0, 0);
+        triggerViewTransition(appDetailsView, dashboardView, 'back');
     });
 
     // Run first initialization

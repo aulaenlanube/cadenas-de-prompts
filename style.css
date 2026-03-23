@@ -74,13 +74,23 @@ body::before {
 
 .view.active-view {
   display: block;
-  opacity: 1;
-  animation: viewEntry 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 }
 
-@keyframes viewEntry {
-  from { opacity: 0; transform: scale(0.98) translateY(10px); }
-  to { opacity: 1; transform: scale(1) translateY(0); }
+@keyframes fadeOutSwipe {
+  from { opacity: 1; transform: translateX(0) scale(1); filter: blur(0); }
+  to { opacity: 0; transform: translateX(-40px) scale(0.96); filter: blur(4px); }
+}
+@keyframes fadeInSwipe {
+  from { opacity: 0; transform: translateX(40px) scale(1.04); filter: blur(4px); }
+  to { opacity: 1; transform: translateX(0) scale(1); filter: blur(0); }
+}
+@keyframes fadeOutSwipeBack {
+  from { opacity: 1; transform: translateX(0) scale(1); filter: blur(0); }
+  to { opacity: 0; transform: translateX(40px) scale(1.04); filter: blur(4px); }
+}
+@keyframes fadeInSwipeBack {
+  from { opacity: 0; transform: translateX(-40px) scale(0.96); filter: blur(4px); }
+  to { opacity: 1; transform: translateX(0) scale(1); filter: blur(0); }
 }
 
 /* Ultra premium glass panel */
@@ -210,28 +220,54 @@ body::before {
   letter-spacing: 1px;
 }
 
-/* App Details */
-.back-btn {
+/* App Details Premium Button */
+.premium-back-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  color: var(--text-muted);
+  gap: 0.8rem;
+  color: var(--text-main);
+  background: var(--surface-color);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.15);
+  padding: 0.6rem 1.5rem;
+  border-radius: 40px;
   font-weight: 600;
-  margin-bottom: 3rem;
-  background: none;
-  border: none;
-  font-size: 1.1rem;
-  cursor: pointer;
+  font-size: 0.95rem;
   font-family: inherit;
-  transition: all 0.3s ease;
-  padding: 0.5rem 1rem;
-  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  margin-bottom: 3rem;
+  position: relative;
+  overflow: hidden;
 }
 
-.back-btn:hover {
-  color: var(--text-main);
-  background: rgba(255,255,255,0.05);
+.premium-back-btn::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%; width: 50%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  transition: all 0.5s ease;
+}
+
+.premium-back-btn:hover {
   transform: translateX(-5px);
+  border-color: rgba(255,255,255,0.4);
+  background: rgba(255,255,255,0.06);
+  box-shadow: 0 10px 25px rgba(168, 85, 247, 0.2);
+}
+
+.premium-back-btn:hover i {
+  transform: translateX(-4px);
+}
+
+.premium-back-btn:hover::before {
+  left: 200%;
+}
+
+.premium-back-btn i {
+  transition: transform 0.3s ease;
 }
 
 .details-header {
@@ -496,6 +532,18 @@ body.light-theme .app-card-icon {
 
 body.light-theme .prompts-line {
     background: rgba(0,0,0,0.1);
+}
+
+body.light-theme .premium-back-btn {
+  background: rgba(255, 255, 255, 0.8);
+  border-color: rgba(0,0,0,0.1);
+  color: #0f172a;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+body.light-theme .premium-back-btn:hover {
+  border-color: rgba(99, 102, 241, 0.5);
+  background: rgba(255, 255, 255, 1);
 }
 
 /* Theme Toggle Button Panel */
