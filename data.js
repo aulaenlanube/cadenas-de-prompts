@@ -35,9 +35,12 @@ const appsData = [
       { id: 25, text: 'Al pulsar sobre la luna también se debe detener para observala mejor como el resto de planetas, y la iluminación también debe ser coherente' },
       { id: 26, text: 'quiero que añadas la opción de acercarse alejarse y que se mantenga en esa escala\nquiero que el mensaje "Haz clic en un planeta para viajar a él" esté en el menú de configuración\nquiero que el menú sea más coherente visualmente con el resto de la app' },
       { id: 27, text: 'El estilo del menú de configuración te he dicho que lo quiero distinto' },
+      { id: 28, text: 'Quiero que añadas un botón para poder reiniciar el progreso de la exporación, este botón debe estar en el menú de configuración' },
+      { id: 29, text: 'Añade una animación original al reiniciar el progreso de la exporación' },
+      { id: 30, text: 'Crea varias actividades para asimilar los conceptos del sistema solar, como ordenar los planetas por proximidad al sol y relaciones entre los planetas y los puntos de exploración' },
+      { id: 31, text: 'Mejora en general el aspecto visual de la app, quiero que sea más atractiva y moderna' }
     ]
-  },
-  {
+  }, {
     id: 'mesa-crafteo',
     title: 'Mesa de crafteo',
     description: 'Aprende los elementos y combinaciones en física como si fuera un juego.',
