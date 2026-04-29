@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node -e ' *)",
+      "Bash(curl -s -o /dev/null -w \"html=%{http_code} size=%{size_download}\\\\n\" http://localhost:8766/)",
+      "Bash(curl -s -o /dev/null -w \"js=%{http_code} size=%{size_download}\\\\n\" http://localhost:8766/app.js)",
+      "Bash(curl -s -o /dev/null -w \"data=%{http_code} size=%{size_download}\\\\n\" http://localhost:8766/infografias-data.js)",
+      "Bash(curl -s -o /dev/null -w \"img=%{http_code} size=%{size_download}\\\\n\" \"http://localhost:8766/imgs/infografias-webp/01-ciclo-agua.webp\")",
+      "Bash(curl -s -o /dev/null -w \"css=%{http_code} size=%{size_download}\\\\n\" http://localhost:8766/style.css)",
+      "Bash(pkill -f \"node -e\")",
+      "Bash(curl -s -o /dev/null -w \"html=%{http_code}\\\\n\" http://localhost:8767/)",
+      "Bash(curl -s -o /dev/null -w \"js=%{http_code}\\\\n\" http://localhost:8767/app.js)",
+      "Bash(curl -s -o /dev/null -w \"css=%{http_code}\\\\n\" http://localhost:8767/style.css)",
+      "Bash(curl -s -o /dev/null -w \"img=%{http_code} size=%{size_download}\\\\n\" \"http://localhost:8767/imgs/infografias-webp/01-ciclo-agua.webp\")"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\edtor\\Desktop\\cadenas-de-prompts\\imgs\\infografias-image2"
+    ]
+  }
+}

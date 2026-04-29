@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/edtor/Desktop/cadenas-de-prompts//**)",
+      "Read(//c/Users/edtor/Desktop/cadenas-de-prompts/imgs/**)",
+      "Read(//c/Users/edtor/Desktop/cadenas-de-prompts/imgs//**)",
+      "Bash(ffmpeg -i \"ChatGPT Image 29 abr 2026, 20_53_09.png\" -compression_level 6 -quality 80 -y \"../infografias-webp/01-ciclo-agua.webp\")",
+      "Read(//c/Users/edtor/Desktop/cadenas-de-prompts/**)",
+      "Bash(node -e ' *)",
+      "Bash(python -m http.server 8765)",
+      "Bash(curl -s http://localhost:8765/ -o /dev/null -w \"%{http_code}\\\\n\")",
+      "Bash(curl -s http://localhost:8765/infografias-data.js -o /dev/null -w \"%{http_code}\\\\n\")",
+      "Bash(curl -s \"http://localhost:8765/imgs/infografias-webp/01-ciclo-agua.webp\" -o /dev/null -w \"%{http_code}\\\\n\")",
+      "Bash(curl -sI \"http://localhost:8765/imgs/infografias-webp/01-ciclo-agua.webp\")",
+      "Bash(curl -v \"http://localhost:8765/imgs/infografias-webp/01-ciclo-agua.webp\" -o /tmp/test.webp)"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\edtor\\Desktop\\cadenas-de-prompts\\imgs"
+    ]
+  }
+}

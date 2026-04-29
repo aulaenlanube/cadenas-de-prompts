@@ -16,15 +16,33 @@
 <body>
     <div id="progressBar" class="scroll-progress"></div>
 
-    <!-- Theme Toggle Panel -->
-    <div class="theme-toggle-panel glass-panel">
-        <button id="lightThemeBtn" class="theme-btn" title="Modo Claro">
-            <i data-lucide="sun" style="width:20px;height:20px;"></i>
-        </button>
-        <button id="darkThemeBtn" class="theme-btn active" title="Modo Oscuro">
-            <i data-lucide="moon" style="width:20px;height:20px;"></i>
-        </button>
-    </div>
+    <!-- Site Header -->
+    <header class="site-header">
+        <div class="site-header__inner">
+            <a href="#" class="site-brand" data-nav="dashboard">
+                <i data-lucide="sparkles" style="width:18px;height:18px;"></i>
+                <span>Prompts</span>
+            </a>
+            <nav class="site-nav">
+                <button class="nav-link is-active" data-nav="dashboard">
+                    <i data-lucide="link-2" style="width:14px;height:14px;"></i>
+                    <span>Cadenas de prompts</span>
+                </button>
+                <button class="nav-link" data-nav="infografias">
+                    <i data-lucide="image" style="width:14px;height:14px;"></i>
+                    <span>Infografías</span>
+                </button>
+            </nav>
+            <div class="site-actions">
+                <button id="lightThemeBtn" class="theme-btn" title="Modo Claro">
+                    <i data-lucide="sun" style="width:18px;height:18px;"></i>
+                </button>
+                <button id="darkThemeBtn" class="theme-btn active" title="Modo Oscuro">
+                    <i data-lucide="moon" style="width:18px;height:18px;"></i>
+                </button>
+            </div>
+        </div>
+    </header>
 
     <!-- Scroll To Top Button -->
     <button id="scrollTopBtn" class="scroll-top-btn glass-panel" title="Volver arriba">
@@ -89,6 +107,26 @@
             <section id="cardsGrid" class="cards-grid">
                 <!-- Cards will be injected by app.js -->
             </section>
+
+            <!-- Infografías CTA Banner -->
+            <section id="infografiasCta" class="infografias-cta glass-panel">
+                <div class="infografias-cta__bg" id="infografiasCtaBg"></div>
+                <div class="infografias-cta__content">
+                    <span class="infografias-eyebrow">
+                        <i data-lucide="image" style="width:16px;height:16px;"></i>
+                        Prompts para imágenes
+                    </span>
+                    <h2>Infografías generadas con <span class="title-gradient">Image-2</span></h2>
+                    <p>Explora una galería de láminas educativas creadas con prompts profesionales. Cada infografía muestra el prompt exacto utilizado para generarla.</p>
+                    <button id="openInfografiasBtn" class="primary-btn">
+                        <span>Explorar la galería</span>
+                        <i data-lucide="arrow-right" style="width:20px;height:20px;"></i>
+                    </button>
+                </div>
+                <div class="infografias-cta__preview" id="infografiasCtaPreview">
+                    <!-- Preview thumbnails injected by app.js -->
+                </div>
+            </section>
         </main>
 
         <!-- App Details View -->
@@ -120,10 +158,200 @@
                 </div>
             </section>
         </main>
+
+        <!-- Infografías View (its own page) -->
+        <main id="infografiasView" class="view">
+            <button id="backFromInfografiasBtn" class="premium-back-btn">
+                <i data-lucide="arrow-left" style="width:18px;height:18px;"></i>
+                <span>Menú Principal</span>
+            </button>
+
+            <header class="infografias-header">
+                <span class="infografias-eyebrow">
+                    <i data-lucide="image" style="width:16px;height:16px;"></i>
+                    Prompts para imágenes
+                </span>
+                <h1 class="infografias-title">
+                    Infografías generadas con <span class="title-gradient">Image-2</span>
+                </h1>
+                <p class="infografias-subtitle">
+                    Una colección de láminas educativas creadas a partir de prompts cuidadosamente diseñados.
+                    Navega por el carrusel y descubre el prompt exacto detrás de cada infografía.
+                </p>
+                <button id="metaPromptBtn" class="meta-prompt-btn">
+                    <span class="meta-prompt-btn__icon">
+                        <i data-lucide="lightbulb" style="width:16px;height:16px;"></i>
+                    </span>
+                    <span class="meta-prompt-btn__label">¿Cómo se crearon estos prompts?</span>
+                    <i data-lucide="arrow-right" style="width:14px;height:14px;"></i>
+                </button>
+            </header>
+
+            <div class="carousel-stage" id="carouselStage">
+                <button class="carousel-arrow carousel-arrow--prev" id="carouselPrev" title="Anterior">
+                    <i data-lucide="chevron-left" style="width:28px;height:28px;"></i>
+                </button>
+                <div class="carousel-track" id="carouselTrack">
+                    <!-- Slides injected by app.js -->
+                </div>
+                <button class="carousel-arrow carousel-arrow--next" id="carouselNext" title="Siguiente">
+                    <i data-lucide="chevron-right" style="width:28px;height:28px;"></i>
+                </button>
+            </div>
+
+            <div class="carousel-meta">
+                <div class="carousel-info" id="carouselInfo">
+                    <h3 id="carouselSlideTitle">—</h3>
+                    <p id="carouselSlideSubtitle">—</p>
+                    <span id="carouselSlideCategory" class="carousel-chip">—</span>
+                </div>
+                <div class="carousel-actions">
+                    <button id="viewPromptBtn" class="primary-btn carousel-prompt-btn">
+                        <i data-lucide="sparkles" style="width:18px;height:18px;"></i>
+                        <span>Ver prompt</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="carousel-dots" id="carouselDots">
+                <!-- Dots injected by app.js -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Prompt Modal -->
+    <div id="promptModal" class="prompt-modal" aria-hidden="true">
+        <div class="prompt-modal__backdrop" data-modal-close></div>
+        <div class="prompt-modal__panel glass-panel" role="dialog" aria-modal="true" aria-labelledby="promptModalTitle">
+            <button class="prompt-modal__close" data-modal-close title="Cerrar">
+                <i data-lucide="x" style="width:22px;height:22px;"></i>
+            </button>
+            <div class="prompt-modal__layout">
+                <figure class="prompt-modal__figure">
+                    <div id="promptModalImageWrap" class="prompt-modal__image-wrap" data-zoom="1">
+                        <img id="promptModalImage" src="" alt="" loading="lazy" draggable="false" />
+                    </div>
+                    <div class="prompt-modal__zoom-controls">
+                        <button id="fullscreenBtn" class="zoom-btn" title="Pantalla completa (F)">
+                            <i data-lucide="maximize" style="width:18px;height:18px;"></i>
+                        </button>
+                        <span class="zoom-divider"></span>
+                        <button id="zoomOutBtn" class="zoom-btn" title="Reducir (−)">
+                            <i data-lucide="minus" style="width:18px;height:18px;"></i>
+                        </button>
+                        <span id="zoomLevel" class="zoom-level">100%</span>
+                        <button id="zoomInBtn" class="zoom-btn" title="Ampliar (+)">
+                            <i data-lucide="plus" style="width:18px;height:18px;"></i>
+                        </button>
+                        <button id="zoomResetBtn" class="zoom-btn zoom-btn--reset" title="Restablecer zoom">
+                            <i data-lucide="rotate-ccw" style="width:16px;height:16px;"></i>
+                        </button>
+                    </div>
+                    <div class="prompt-modal__zoom-hint" id="zoomHint">
+                        <i data-lucide="search" style="width:12px;height:12px;"></i>
+                        <span>Click para ampliar · scroll para zoom · arrastra para mover</span>
+                    </div>
+                </figure>
+                <div class="prompt-modal__body">
+                    <span id="promptModalCategory" class="carousel-chip">—</span>
+                    <h2 id="promptModalTitle">—</h2>
+                    <p id="promptModalSubtitle" class="prompt-modal__subtitle">—</p>
+                    <div class="prompt-modal__prompt-wrapper">
+                        <div class="prompt-modal__prompt-header">
+                            <span><i data-lucide="terminal" style="width:14px;height:14px;"></i> Prompt utilizado</span>
+                            <button id="copyPromptBtn" class="copy-btn" title="Copiar prompt">
+                                <i data-lucide="copy" style="width:14px;height:14px;"></i>
+                                <span>Copiar</span>
+                            </button>
+                        </div>
+                        <pre id="promptModalText" class="prompt-modal__text">—</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Meta-prompt Info Modal -->
+    <div id="infoModal" class="info-modal" aria-hidden="true">
+        <div class="info-modal__backdrop" data-info-close></div>
+        <div class="info-modal__panel glass-panel" role="dialog" aria-modal="true" aria-labelledby="infoModalTitle">
+            <button class="prompt-modal__close" data-info-close title="Cerrar">
+                <i data-lucide="x" style="width:22px;height:22px;"></i>
+            </button>
+
+            <div class="info-modal__hero">
+                <div class="info-modal__hero-icon">
+                    <i data-lucide="wand-sparkles" style="width:32px;height:32px;"></i>
+                </div>
+                <span class="info-modal__eyebrow">La técnica del meta-prompt</span>
+                <h2 id="infoModalTitle">No te tienes que inventar prompts tan detallados</h2>
+                <p class="info-modal__lead">
+                    Los prompts de esta galería son largos, técnicos y muy específicos.
+                    No los escribí a mano — los generó la propia IA. Es lo que se llama un
+                    <strong>meta-prompt</strong>: un prompt cuyo objetivo es producir otros prompts.
+                </p>
+            </div>
+
+            <div class="info-modal__steps">
+                <div class="info-step">
+                    <div class="info-step__num">1</div>
+                    <div class="info-step__body">
+                        <h3>Defines lo que necesitas</h3>
+                        <p>Le pides a la IA que te devuelva prompts listos para Image-2 con tus condiciones: idioma, formato vertical 9:16, estilo editorial, nivel académico, paleta, tipografía...</p>
+                    </div>
+                </div>
+                <div class="info-step">
+                    <div class="info-step__num">2</div>
+                    <div class="info-step__body">
+                        <h3>La IA escribe los prompts</h3>
+                        <p>Ella se ocupa de la parte tediosa: redactar instrucciones detalladas, añadir bloques de conceptos, fórmulas, ejemplos visuales y notas de diseño profesional.</p>
+                    </div>
+                </div>
+                <div class="info-step">
+                    <div class="info-step__num">3</div>
+                    <div class="info-step__body">
+                        <h3>Tú los usas tal cual</h3>
+                        <p>Copias cada prompt resultante, lo pegas en Image-2 y obtienes la infografía. Si algo no te convence, ajustas el meta-prompt y regeneras.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-modal__example">
+                <div class="info-modal__example-header">
+                    <i data-lucide="quote" style="width:14px;height:14px;"></i>
+                    <span>Ejemplo de meta-prompt</span>
+                </div>
+                <pre class="info-modal__example-text">Dame 10 prompts en español, listos para Image-2, para generar infografías educativas verticales en formato 9:16 sobre estos temas:
+ciclo del agua, fotosíntesis, estados de la materia, fracciones, teorema de Pitágoras, leyes de Newton, partes de un ordenador, cómo aprende una IA, tabla periódica y sistema solar.
+
+Quiero que cada prompt sea muy detallado, profesional, con estética editorial moderna, orientado a alumnado de bachillerato y universidad. Incluye títulos, subtítulos, bloques conceptuales con definiciones, fórmulas cuando proceda, ejemplos visuales y recuadros explicativos. Indica también colores, jerarquía visual y nivel de detalle.</pre>
+            </div>
+
+            <div class="info-modal__tip">
+                <div class="info-modal__tip-header">
+                    <i data-lucide="zap" style="width:14px;height:14px;"></i>
+                    <span>Y aún más sencillo</span>
+                </div>
+                <p class="info-modal__tip-text">
+                    Para obtener muchos prompts a la vez en ocasiones no hace ni falta un meta-prompt tan detallado.
+                    Con una frase simple como esta es más que suficiente:
+                </p>
+                <pre class="info-modal__tip-example">Muéstrame 10 prompts para generar infografías complejas y avanzadas para alumnado de bachillerato.</pre>
+                <p class="info-modal__tip-text info-modal__tip-text--muted">
+                    La IA rellenará por ti el formato, estilo y nivel de detalle. Si el resultado no te convence, refinas la frase y vuelves a pedir.
+                </p>
+            </div>
+
+            <div class="info-modal__footer">
+                <i data-lucide="sparkles" style="width:14px;height:14px;"></i>
+                <span>Trabaja sobre tus ideas, deja que la IA escriba los prompts.</span>
+            </div>
+        </div>
     </div>
 
     <!-- Application Script -->
     <script src="data.js"></script>
+    <script src="infografias-data.js"></script>
     <script src="app.js"></script>
 </body>
 </html>
