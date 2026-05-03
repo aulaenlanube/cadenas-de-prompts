@@ -542,6 +542,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function closePromptModal() {
         if (!promptModal) return;
+        // Move focus out before hiding: browsers block aria-hidden on an
+        // element that contains the focused element (the close button itself).
+        if (promptModal.contains(document.activeElement)) {
+            document.activeElement.blur();
+        }
         promptModal.classList.remove('is-open', 'is-fullscreen');
         promptModal.setAttribute('aria-hidden', 'true');
         document.body.classList.remove('modal-open');
@@ -835,6 +840,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function closeInfoModal() {
         if (!infoModal) return;
+        if (infoModal.contains(document.activeElement)) {
+            document.activeElement.blur();
+        }
         infoModal.classList.remove('is-open');
         infoModal.setAttribute('aria-hidden', 'true');
         // Only release modal-open if no other modal is open
