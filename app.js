@@ -526,26 +526,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const promptModalText = document.getElementById('promptModalText');
     const copyPromptBtn = document.getElementById('copyPromptBtn');
 
-    // iOS-friendly scroll lock. Plain `overflow: hidden` on the body
-    // doesn't reliably stop background scroll on iOS Safari and can leave
-    // the page in a weird state after closing. Instead we pin the body
-    // with position:fixed and restore the scroll position on close.
-    let savedScrollY = 0;
-    let openModalCount = 0;
+    // Simple, reliable scroll lock. We tried a position:fixed approach
+    // but iOS Safari got into a stuck state on the second open (the
+    // body shift wasn't always cleared cleanly between modal cycles).
+    // Plain overflow: hidden on body+html is enough — the modals are
+    // position: fixed so they cover the viewport regardless.
     function lockBackgroundScroll() {
-        if (openModalCount === 0) {
-            savedScrollY = window.scrollY || window.pageYOffset || 0;
-            document.body.style.top = `-${savedScrollY}px`;
-            document.body.classList.add('modal-open');
-        }
-        openModalCount++;
+        document.body.classList.add('modal-open');
     }
     function unlockBackgroundScroll() {
-        openModalCount = Math.max(0, openModalCount - 1);
-        if (openModalCount === 0) {
+        // Only release when no other modal is still open.
+        const promptOpen = promptModal && promptModal.classList.contains('is-open');
+        const infoOpen = infoModal && infoModal.classList.contains('is-open');
+        if (!promptOpen && !infoOpen) {
             document.body.classList.remove('modal-open');
-            document.body.style.top = '';
-            window.scrollTo(0, savedScrollY);
         }
     }
 

@@ -1594,14 +1594,7 @@ body.light-theme .prompt-modal__text {
   border-left-color: #6366f1;
 }
 
-/* Robust scroll lock that works on iOS Safari. The body is pinned with
-   position:fixed and shifted up by the saved scrollY so the page stays
-   visually in place; JS restores scroll on modal close. */
 body.modal-open {
-  position: fixed;
-  left: 0;
-  right: 0;
-  width: 100%;
   overflow: hidden;
 }
 
