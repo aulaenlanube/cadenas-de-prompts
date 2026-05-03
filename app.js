@@ -526,6 +526,29 @@ document.addEventListener('DOMContentLoaded', () => {
     const promptModalText = document.getElementById('promptModalText');
     const copyPromptBtn = document.getElementById('copyPromptBtn');
 
+    // iOS-friendly scroll lock. Plain `overflow: hidden` on the body
+    // doesn't reliably stop background scroll on iOS Safari and can leave
+    // the page in a weird state after closing. Instead we pin the body
+    // with position:fixed and restore the scroll position on close.
+    let savedScrollY = 0;
+    let openModalCount = 0;
+    function lockBackgroundScroll() {
+        if (openModalCount === 0) {
+            savedScrollY = window.scrollY || window.pageYOffset || 0;
+            document.body.style.top = `-${savedScrollY}px`;
+            document.body.classList.add('modal-open');
+        }
+        openModalCount++;
+    }
+    function unlockBackgroundScroll() {
+        openModalCount = Math.max(0, openModalCount - 1);
+        if (openModalCount === 0) {
+            document.body.classList.remove('modal-open');
+            document.body.style.top = '';
+            window.scrollTo(0, savedScrollY);
+        }
+    }
+
     function openPromptModal(item) {
         if (!item || !promptModal) return;
         promptModalImage.src = item.image;
@@ -537,11 +560,12 @@ document.addEventListener('DOMContentLoaded', () => {
         promptModalText.textContent = item.prompt;
         promptModal.classList.add('is-open');
         promptModal.setAttribute('aria-hidden', 'false');
-        document.body.classList.add('modal-open');
+        lockBackgroundScroll();
     }
 
     function closePromptModal() {
         if (!promptModal) return;
+        if (!promptModal.classList.contains('is-open')) return;
         // Move focus out before hiding: browsers block aria-hidden on an
         // element that contains the focused element (the close button itself).
         if (promptModal.contains(document.activeElement)) {
@@ -549,7 +573,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         promptModal.classList.remove('is-open', 'is-fullscreen');
         promptModal.setAttribute('aria-hidden', 'true');
-        document.body.classList.remove('modal-open');
+        unlockBackgroundScroll();
     }
 
     if (viewPromptBtn) {
@@ -833,22 +857,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function openInfoModal() {
         if (!infoModal) return;
+        if (infoModal.classList.contains('is-open')) return;
         infoModal.classList.add('is-open');
         infoModal.setAttribute('aria-hidden', 'false');
-        document.body.classList.add('modal-open');
+        lockBackgroundScroll();
     }
 
     function closeInfoModal() {
         if (!infoModal) return;
+        if (!infoModal.classList.contains('is-open')) return;
         if (infoModal.contains(document.activeElement)) {
             document.activeElement.blur();
         }
         infoModal.classList.remove('is-open');
         infoModal.setAttribute('aria-hidden', 'true');
-        // Only release modal-open if no other modal is open
-        if (!promptModal || !promptModal.classList.contains('is-open')) {
-            document.body.classList.remove('modal-open');
-        }
+        unlockBackgroundScroll();
     }
 
     if (metaPromptBtn) metaPromptBtn.addEventListener('click', openInfoModal);

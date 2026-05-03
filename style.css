@@ -16,6 +16,38 @@
   padding: 0;
 }
 
+/* All clickable controls: skip the 300ms tap delay on touch devices and
+   suppress the gray tap highlight that makes buttons "stick" visually. */
+button,
+a,
+[role="button"] {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* On touch-only devices, :hover state stays "stuck" on the last-tapped
+   element until the user taps elsewhere. Disable hover-induced transforms
+   so buttons don't look frozen mid-animation after a tap. */
+@media (hover: none) {
+  .primary-btn:hover,
+  .carousel-arrow:hover,
+  .carousel-arrow--prev:hover,
+  .carousel-arrow--next:hover,
+  .carousel-dot:hover,
+  .copy-btn:hover,
+  .zoom-btn:hover,
+  .meta-prompt-btn:hover,
+  .scroll-top-btn:hover,
+  .premium-back-btn:hover,
+  .nav-link:hover,
+  .theme-btn:hover,
+  .carousel-prompt-btn:hover {
+    transform: none !important;
+  }
+  /* Cancel the lift on the meta-prompt icon and the carousel-info hover too */
+  .meta-prompt-btn:hover .meta-prompt-btn__icon { transform: none !important; }
+}
+
 body {
   font-family: 'Outfit', system-ui, -apple-system, sans-serif;
   background-color: var(--bg-color);
@@ -492,11 +524,20 @@ body.light-theme .site-actions {
   border: none;
   cursor: pointer;
   box-shadow: 0 10px 25px rgba(129, 140, 248, 0.3);
+  /* Eliminate the 300ms click delay on touch devices and prevent the
+     browser from interpreting taps as anything other than a click. */
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.primary-btn:hover {
-  transform: translateY(-4px) scale(1.05);
-  box-shadow: 0 20px 40px rgba(129, 140, 248, 0.5);
+/* Hover effect only on devices that actually support hover. On touch
+   devices the :hover state otherwise stays "stuck" after a tap, making
+   the button look frozen until you tap somewhere else. */
+@media (hover: hover) {
+  .primary-btn:hover {
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 20px 40px rgba(129, 140, 248, 0.5);
+  }
 }
 
 /* Elegant Timeline / Prompts Section */
@@ -1550,7 +1591,14 @@ body.light-theme .prompt-modal__text {
   border-left-color: #6366f1;
 }
 
+/* Robust scroll lock that works on iOS Safari. The body is pinned with
+   position:fixed and shifted up by the saved scrollY so the page stays
+   visually in place; JS restores scroll on modal close. */
 body.modal-open {
+  position: fixed;
+  left: 0;
+  right: 0;
+  width: 100%;
   overflow: hidden;
 }
 
