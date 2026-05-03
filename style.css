@@ -1311,16 +1311,11 @@ body.light-theme .prompt-modal__close {
   inset: 0;
   overflow: hidden;
   cursor: grab;
-  /* Default: allow vertical pan-y so users can scroll the modal by
-     swiping over the image. JS only takes over when the image is
-     zoomed (the [data-zoom="zoomed"] override below). */
-  touch-action: pan-y;
-  user-select: none;
-}
-
-.prompt-modal__image-wrap[data-zoom="zoomed"] {
-  /* When zoomed, JS handles panning so we disable native gestures */
+  /* Disable native gestures so JS can handle pinch-to-zoom and drag-to-pan
+     directly. Body scroll lives in a separate area, so blocking gestures
+     here doesn't trap the user. */
   touch-action: none;
+  user-select: none;
 }
 
 .prompt-modal__image-wrap[data-zoom="1"] {
@@ -2343,9 +2338,25 @@ body.light-theme .info-modal__footer {
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
   }
 
-  /* Zoom UI: useless on touch — image already fits */
-  .prompt-modal__zoom-hint,
-  .prompt-modal__zoom-controls { display: none; }
+  /* Zoom controls visible on mobile so users can amplify the image.
+     Made larger and more tappable. */
+  .prompt-modal__zoom-hint { display: none; }
+  .prompt-modal__zoom-controls {
+    bottom: 0.6rem;
+    padding: 0.35rem 0.5rem;
+    gap: 0.3rem;
+  }
+  .prompt-modal__zoom-controls .zoom-btn {
+    width: 36px;
+    height: 36px;
+  }
+  .prompt-modal__zoom-controls .zoom-level {
+    font-size: 0.72rem;
+    min-width: 44px;
+  }
+  /* Hide the fullscreen button on mobile (full-bleed already) */
+  .prompt-modal__zoom-controls #fullscreenBtn,
+  .prompt-modal__zoom-controls .zoom-divider:first-of-type { display: none; }
 
   /* Fullscreen mode is irrelevant on mobile (modal already fills) */
   .prompt-modal.is-fullscreen .prompt-modal__figure {

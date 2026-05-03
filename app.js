@@ -801,7 +801,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (imageWrap) {
-        // Double-click to toggle zoom (zoom in at click point or reset)
+        // Double-click / double-tap to toggle zoom
         imageWrap.addEventListener('dblclick', (e) => {
             if (zoomState.scale > 1.5) {
                 resetZoom();
@@ -817,15 +817,101 @@ document.addEventListener('DOMContentLoaded', () => {
             setZoom(zoomState.scale + delta, e.clientX, e.clientY);
         }, { passive: false });
 
-        // Drag to pan — enabled whenever the image overflows the wrap in any direction
+        // ---- Touch: pinch-to-zoom + single-finger pan when zoomed ----
+        // We use Touch events (instead of Pointer events) for pinch because
+        // Pointer events don't natively expose simultaneous touches in a way
+        // that's portable for gesture math.
+        const activeTouches = new Map(); // identifier -> {x, y}
+        let pinchStart = null;           // {distance, scale, cx, cy, ox, oy}
+        let touchPanStart = null;        // {x, y, ox, oy}
+
+        function getTouchesArr() {
+            return Array.from(activeTouches.values());
+        }
+
+        imageWrap.addEventListener('touchstart', (e) => {
+            for (const t of e.changedTouches) {
+                activeTouches.set(t.identifier, { x: t.clientX, y: t.clientY });
+            }
+            const touches = getTouchesArr();
+            if (touches.length === 2) {
+                // Begin pinch
+                const [a, b] = touches;
+                const dx = b.x - a.x;
+                const dy = b.y - a.y;
+                pinchStart = {
+                    distance: Math.hypot(dx, dy),
+                    scale: zoomState.scale,
+                    cx: (a.x + b.x) / 2,
+                    cy: (a.y + b.y) / 2,
+                    ox: zoomState.x,
+                    oy: zoomState.y,
+                };
+                touchPanStart = null;
+            } else if (touches.length === 1 && imageWrap.dataset.zoom === 'zoomed') {
+                // Begin single-finger pan (only when zoomed)
+                const t = touches[0];
+                touchPanStart = { x: t.x, y: t.y, ox: zoomState.x, oy: zoomState.y };
+                imageWrap.classList.add('is-panning');
+            }
+            // Note: native dblclick handler covers double-tap-to-zoom.
+        }, { passive: true });
+
+        imageWrap.addEventListener('touchmove', (e) => {
+            for (const t of e.changedTouches) {
+                if (activeTouches.has(t.identifier)) {
+                    activeTouches.set(t.identifier, { x: t.clientX, y: t.clientY });
+                }
+            }
+            const touches = getTouchesArr();
+            if (touches.length === 2 && pinchStart) {
+                e.preventDefault();
+                const [a, b] = touches;
+                const dx = b.x - a.x;
+                const dy = b.y - a.y;
+                const distance = Math.hypot(dx, dy);
+                const ratio = distance / pinchStart.distance;
+                const newScale = pinchStart.scale * ratio;
+                const cx = (a.x + b.x) / 2;
+                const cy = (a.y + b.y) / 2;
+                // Anchor the midpoint as we scale (keeps the spot under the
+                // user's fingers fixed)
+                setZoom(newScale, cx, cy);
+            } else if (touches.length === 1 && touchPanStart) {
+                e.preventDefault();
+                const t = touches[0];
+                zoomState.x = touchPanStart.ox + (t.x - touchPanStart.x);
+                zoomState.y = touchPanStart.oy + (t.y - touchPanStart.y);
+                clampPan();
+                applyZoom();
+            }
+        }, { passive: false });
+
+        const endTouch = (e) => {
+            for (const t of e.changedTouches) {
+                activeTouches.delete(t.identifier);
+            }
+            if (activeTouches.size < 2) pinchStart = null;
+            if (activeTouches.size === 0) {
+                touchPanStart = null;
+                imageWrap.classList.remove('is-panning');
+            }
+        };
+        imageWrap.addEventListener('touchend', endTouch);
+        imageWrap.addEventListener('touchcancel', endTouch);
+
+        // ---- Mouse / pen: drag to pan (when zoomed) ----
+        // We gate on pointerType so we don't double-handle touch.
         let panStart = null;
         imageWrap.addEventListener('pointerdown', (e) => {
+            if (e.pointerType === 'touch') return;
             if (imageWrap.dataset.zoom !== 'zoomed') return;
             panStart = { x: e.clientX, y: e.clientY, ox: zoomState.x, oy: zoomState.y };
             imageWrap.classList.add('is-panning');
             imageWrap.setPointerCapture(e.pointerId);
         });
         imageWrap.addEventListener('pointermove', (e) => {
+            if (e.pointerType === 'touch') return;
             if (!panStart) return;
             zoomState.x = panStart.ox + (e.clientX - panStart.x);
             zoomState.y = panStart.oy + (e.clientY - panStart.y);
@@ -833,6 +919,7 @@ document.addEventListener('DOMContentLoaded', () => {
             applyZoom();
         });
         const endPan = (e) => {
+            if (e.pointerType === 'touch') return;
             if (!panStart) return;
             panStart = null;
             imageWrap.classList.remove('is-panning');
