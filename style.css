@@ -1311,8 +1311,16 @@ body.light-theme .prompt-modal__close {
   inset: 0;
   overflow: hidden;
   cursor: grab;
-  touch-action: none;
+  /* Default: allow vertical pan-y so users can scroll the modal by
+     swiping over the image. JS only takes over when the image is
+     zoomed (the [data-zoom="zoomed"] override below). */
+  touch-action: pan-y;
   user-select: none;
+}
+
+.prompt-modal__image-wrap[data-zoom="zoomed"] {
+  /* When zoomed, JS handles panning so we disable native gestures */
+  touch-action: none;
 }
 
 .prompt-modal__image-wrap[data-zoom="1"] {
@@ -2260,18 +2268,18 @@ body.light-theme .info-modal__footer {
     -webkit-overflow-scrolling: touch;
   }
 
-  /* Image area — width fills the panel (capped on wider tablets so the
-     9:16 image doesn't become absurdly tall) and aspect-ratio is
-     preserved so there's no letterboxing on phones. */
+  /* Image area — fixed proportional height (not full-screen). This
+     ensures the prompt is visible immediately below the image so the
+     user knows it's there and doesn't have to scroll past a giant
+     viewport-sized image just to read it. */
   .prompt-modal__figure {
     flex: 0 0 auto;
     width: 100%;
-    max-width: 480px;
-    height: auto;
-    aspect-ratio: 9 / 16;
-    margin: 0 auto;
-    min-height: 0;
-    background: #000;
+    height: 48vh;
+    min-height: 260px;
+    max-height: 60vh;
+    margin: 0;
+    background: #0a0a14;
   }
   .prompt-modal__figure::after { display: none; }
   .prompt-modal__image-wrap {
@@ -2281,7 +2289,10 @@ body.light-theme .info-modal__footer {
   .prompt-modal__image-wrap img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* aspect already matches → no crop, no bars */
+    /* contain: full infographic always visible (with letterbox on
+       sides for portrait images on wider containers). User can tap
+       to enlarge/zoom if they want more detail. */
+    object-fit: contain;
   }
 
   /* Body — ample padding, sits in normal flow, no internal scroll */
