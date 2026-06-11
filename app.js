@@ -828,8 +828,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 activeTouches.set(t.identifier, { x: t.clientX, y: t.clientY });
             }
             const touches = getTouchesArr();
-            if (touches.length === 2) {
-                // Begin pinch
+            if (touches.length >= 2) {
+                // Block iOS Safari's native pinch-zoom on multi-touch
+                e.preventDefault();
                 const [a, b] = touches;
                 const dx = b.x - a.x;
                 const dy = b.y - a.y;
@@ -849,7 +850,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 imageWrap.classList.add('is-panning');
             }
             // Note: native dblclick handler covers double-tap-to-zoom.
-        }, { passive: true });
+        }, { passive: false });
+
+        // Safari iOS fires its own GestureEvents (a non-standard event
+        // family) BEFORE touch events when it detects a pinch — and uses
+        // those to drive its native page zoom. preventDefault on these
+        // is the only way to suppress Safari's pinch behavior so our
+        // touch-based pinch handler can take over cleanly.
+        imageWrap.addEventListener('gesturestart', (e) => { e.preventDefault(); });
+        imageWrap.addEventListener('gesturechange', (e) => { e.preventDefault(); });
+        imageWrap.addEventListener('gestureend', (e) => { e.preventDefault(); });
 
         imageWrap.addEventListener('touchmove', (e) => {
             for (const t of e.changedTouches) {
