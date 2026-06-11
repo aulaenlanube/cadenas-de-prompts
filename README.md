@@ -11,7 +11,7 @@ Actualmente, el repositorio documenta las interacciones para crear cuatro aplica
 1. **Sistema solar 3D** (Biología / Astronomía) - *Incluye todas sus 19 cadenas de prompts detalladas.*
 2. **Mesa de crafteo** (Física)
 3. **La célula animal** (Biología)
-4. **La célula vegetal** (Biología)
+4. **La Fortaleza** (Multiasignatura) - *Tower defense educativo 3D creado en una única conversación con Claude Code: 22 prompts → 16 commits, con fechas, capturas y el commit resultante de cada prompt.*
 
 Cada registro en la aplicación cuenta con un enlace directo ("Probar app") hacia la versión desplegada y en funcionamiento de la aplicación en [apps-educativas.com](https://apps-educativas.com).
 

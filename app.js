@@ -109,15 +109,60 @@ document.addEventListener('DOMContentLoaded', () => {
         lineBg.appendChild(lineFill);
         promptsContainer.appendChild(lineBg);
 
+        const esc = (str) => String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
+
         app.prompts.forEach((prompt) => {
+            // Session events (compactions, pauses) render as a divider
+            // between prompts, outside the numbered timeline items.
+            if (prompt.sessionBreak) {
+                const breakItem = document.createElement('div');
+                breakItem.className = 'session-break';
+                breakItem.innerHTML = `
+                    <i data-lucide="archive" style="width:15px;height:15px;"></i>
+                    <span>${esc(prompt.sessionBreak)}</span>
+                `;
+                promptsContainer.appendChild(breakItem);
+            }
+
             const promptItem = document.createElement('div');
             promptItem.className = 'prompt-item';
-            
+
+            const metaChips = [];
+            if (prompt.date) {
+                metaChips.push(`
+                    <span class="prompt-chip">
+                        <i data-lucide="clock"></i>${esc(prompt.date)}
+                    </span>`);
+            }
+            if (prompt.screenshot) {
+                metaChips.push(`
+                    <span class="prompt-chip prompt-chip--shot">
+                        <i data-lucide="camera"></i>Con captura adjunta
+                    </span>`);
+            }
+
+            const headerHtml = metaChips.length ? `
+                <div class="prompt-topline">
+                    <h4>Prompt ${prompt.id}</h4>
+                    <div class="prompt-meta">${metaChips.join('')}</div>
+                </div>` : `
+                <h4>Prompt ${prompt.id}</h4>`;
+
             promptItem.innerHTML = `
                 <div class="prompt-number">${prompt.id}</div>
                 <div class="prompt-content glass-panel">
-                    <h4>Prompt ${prompt.id}</h4>
-                    <div class="prompt-text-block">${prompt.text.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</div>
+                    ${headerHtml}
+                    ${prompt.title ? `<h3 class="prompt-title">${esc(prompt.title)}</h3>` : ''}
+                    <div class="prompt-text-block">${esc(prompt.text)}</div>
+                    ${prompt.commit ? `
+                    <div class="prompt-commit">
+                        <i data-lucide="git-commit-horizontal"></i>
+                        <code>${esc(prompt.commit)}</code>
+                    </div>` : ''}
+                    ${prompt.note ? `<p class="prompt-note">${esc(prompt.note)}</p>` : ''}
                 </div>
             `;
             promptsContainer.appendChild(promptItem);
